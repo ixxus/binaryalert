@@ -4,7 +4,7 @@ terraform {
 }
 
 provider "aws" {
-  // 0.1.4 required for aws_cloudwatch_dashboard
-  version = "~> 0.1.4"
+  // 1.1.0 required for data.aws_s3_bucket
+  version = "~> 1.1.0"
   region  = "${var.aws_region}"
 }

@@ -14,7 +14,7 @@ module "binaryalert_downloader" {
   environment_variables = {
     CARBON_BLACK_URL                 = "${var.carbon_black_url}"
     ENCRYPTED_CARBON_BLACK_API_TOKEN = "${var.encrypted_carbon_black_api_token}"
-    TARGET_S3_BUCKET                 = "${aws_s3_bucket.binaryalert_binaries.id}"
+    TARGET_S3_BUCKET                 = "${data.aws_s3_bucket.binaryalert_binaries.id}"
   }
 
   log_retention_days = "${var.lambda_log_retention_days}"
@@ -46,7 +46,7 @@ module "binaryalert_batcher" {
     BATCH_LAMBDA_NAME      = "${var.name_prefix}_binaryalert_batcher"
     BATCH_LAMBDA_QUALIFIER = "Production"
     OBJECTS_PER_MESSAGE    = "${var.lambda_batch_objects_per_message}"
-    S3_BUCKET_NAME         = "${aws_s3_bucket.binaryalert_binaries.id}"
+    S3_BUCKET_NAME         = "${data.aws_s3_bucket.binaryalert_binaries.id}"
     SQS_QUEUE_URL          = "${aws_sqs_queue.s3_object_queue.id}"
   }
 
@@ -98,7 +98,7 @@ module "binaryalert_analyzer" {
   filename        = "lambda_analyzer.zip"
 
   environment_variables = {
-    S3_BUCKET_NAME                 = "${aws_s3_bucket.binaryalert_binaries.id}"
+    S3_BUCKET_NAME                 = "${data.aws_s3_bucket.binaryalert_binaries.id}"
     SQS_QUEUE_URL                  = "${aws_sqs_queue.s3_object_queue.id}"
     YARA_MATCHES_DYNAMO_TABLE_NAME = "${aws_dynamodb_table.binaryalert_yara_matches.name}"
     YARA_ALERTS_SNS_TOPIC_ARN      = "${aws_sns_topic.yara_match_alerts.arn}"

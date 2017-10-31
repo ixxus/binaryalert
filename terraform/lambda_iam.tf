@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "binaryalert_downloader_policy" {
     sid       = "UploadToBinaryAlertBucket"
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.binaryalert_binaries.arn}/*"]
+    resources = ["${data.aws_s3_bucket.binaryalert_binaries.arn}/*"]
   }
 }
 
@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "binaryalert_batcher_policy" {
     sid       = "ListBinaryAlertBucket"
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
-    resources = ["${aws_s3_bucket.binaryalert_binaries.arn}"]
+    resources = ["${data.aws_s3_bucket.binaryalert_binaries.arn}"]
   }
 
   statement {
@@ -120,7 +120,7 @@ data "aws_iam_policy_document" "binaryalert_analyzer_policy" {
     sid       = "GetFromBinaryAlertBucket"
     effect    = "Allow"
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.binaryalert_binaries.arn}/*"]
+    resources = ["${data.aws_s3_bucket.binaryalert_binaries.arn}/*"]
   }
 
   statement {

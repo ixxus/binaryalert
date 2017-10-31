@@ -45,9 +45,18 @@ resource "aws_s3_bucket" "binaryalert_log_bucket" {
   force_destroy = "${var.force_destroy}"
 }
 
+locals {
+  created_s3_bucket_name = "${replace(var.name_prefix, "_", ".")}.binaryalert-binaries.${var.aws_region}"
+}
+
+data "aws_s3_bucket" "binaryalert_binaries" {
+  bucket = "${var.s3_bucket_name == "" ? local.created_s3_bucket_name : var.s3_bucket_name}"
+}
+
 // Source S3 bucket: binaries uploaded here will be automatically analyzed.
 resource "aws_s3_bucket" "binaryalert_binaries" {
-  bucket = "${replace(var.name_prefix, "_", ".")}.binaryalert-binaries.${var.aws_region}"
+  count  = "${var.s3_bucket_name == "" ? 1 : 0}" // Create only if no pre-existing bucket.
+  bucket = "${local.created_s3_bucket_name}"
   acl    = "private"
 
   logging {
@@ -85,7 +94,7 @@ resource "aws_s3_bucket" "binaryalert_binaries" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = "${aws_s3_bucket.binaryalert_binaries.id}"
+  bucket = "${data.aws_s3_bucket.binaryalert_binaries.id}"
 
   queue {
     queue_arn = "${aws_sqs_queue.s3_object_queue.arn}"

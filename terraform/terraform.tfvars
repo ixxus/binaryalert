@@ -35,6 +35,8 @@ s3_log_expiration_days = 60
 // How long to retain Lambda function logs.
 lambda_log_retention_days = 60
 
+// The name of an existing bucket to use, instead of creating a new bucket
+s3_bucket_name = ""
 
 /* ********** Advanced Configuration ********** */
 // These settings define the constraints and scale of BinaryAlert components.

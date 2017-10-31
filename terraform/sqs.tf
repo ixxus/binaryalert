@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "s3_object_queue_policy" {
     condition {
       test     = "ArnEquals"
       variable = "aws:SourceArn"
-      values   = ["${aws_s3_bucket.binaryalert_binaries.arn}"]
+      values   = ["${data.aws_s3_bucket.binaryalert_binaries.arn}"]
     }
   }
 }
